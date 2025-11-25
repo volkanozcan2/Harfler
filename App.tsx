@@ -91,7 +91,7 @@ const App: React.FC = () => {
   }, [selectedContext, imageCache]);
 
   return (
-    <div className="min-h-screen bg-[#FFFBF0] text-stone-800 flex flex-col md:flex-row overflow-hidden font-nunito">
+    <div className="min-h-screen bg-[#FFFBF0] text-stone-800 flex flex-col md:flex-row overflow-hidden">
       
       {/* Mobile Header */}
       <div className="md:hidden p-4 pb-0 flex items-center justify-center text-orange-500">
