@@ -9,7 +9,8 @@ export const TURKISH_ALPHABET: AlphabetItem[] = [
       { word: 'Arı', englishTranslation: 'Bee' },
       { word: 'Aslan', englishTranslation: 'Lion' },
       { word: 'Armut', englishTranslation: 'Pear' },
-      { word: 'Ay', englishTranslation: 'Moon' }
+      { word: 'Ay', englishTranslation: 'Moon' },
+      { word: 'Ateş', englishTranslation: 'Fire' }
     ]
   },
   { 

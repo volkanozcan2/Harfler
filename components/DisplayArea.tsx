@@ -74,7 +74,7 @@ export const DisplayArea: React.FC<DisplayAreaProps> = ({ selectedContext, state
            className="bg-white hover:bg-orange-50 text-orange-500 border-2 border-orange-200 hover:border-orange-400 font-bold py-3 px-6 rounded-full shadow-lg flex items-center gap-2 transition-all transform hover:scale-105 disabled:opacity-50 disabled:scale-100"
          >
            <RefreshCw size={20} className={`${isLoading ? 'animate-spin' : ''}`} />
-           <span>Başka Resim</span>
+           <span>Farklı Bir Şey Çiz</span>
          </button>
       </div>
     </div>

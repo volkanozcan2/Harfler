@@ -1,9 +1,10 @@
 import { GoogleGenAI } from "@google/genai";
 import { SelectedContext } from "../types";
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-
 export const generateLetterImage = async (context: SelectedContext): Promise<string> => {
+  // Initialize inside the function to avoid top-level process access issues in browser environments
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+
   try {
     const isSoftG = context.letter === 'Ğ';
     
