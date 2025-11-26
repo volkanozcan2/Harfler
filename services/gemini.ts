@@ -41,8 +41,14 @@ export const generateLetterImage = async (context: SelectedContext): Promise<str
     }
     
     throw new Error("No image data found in response");
-  } catch (error) {
+  } catch (error: any) {
     console.error("Gemini API Error:", error);
+    
+    // Check for Quota Exceeded (429) errors specifically
+    if (error.message?.includes('429') || error.message?.includes('quota') || error.status === 429) {
+        throw new Error("QUOTA_EXCEEDED");
+    }
+    
     throw error;
   }
 };

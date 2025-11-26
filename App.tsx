@@ -34,10 +34,17 @@ const App: React.FC = () => {
         status: 'success',
         imageUrl
       });
-    } catch (error) {
+    } catch (error: any) {
+      let errorMessage = "Resim oluşturulamadı. Lütfen tekrar deneyin.";
+      
+      // Provide user-friendly message for quota limits
+      if (error.message === "QUOTA_EXCEEDED") {
+          errorMessage = "Şu an çok yoğunuz! Lütfen 1 dakika bekleyip tekrar deneyin. (API Kotası Doldu)";
+      }
+
       setGenerationState({
         status: 'error',
-        error: "Failed to generate image"
+        error: errorMessage
       });
     }
   };

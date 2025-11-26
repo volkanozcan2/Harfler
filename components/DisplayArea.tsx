@@ -45,9 +45,10 @@ export const DisplayArea: React.FC<DisplayAreaProps> = ({ selectedContext, state
         )}
 
         {state.status === 'error' && (
-           <div className="flex flex-col items-center justify-center text-red-400 p-8 text-center">
-            <AlertCircle size={48} className="mb-2" />
-            <p>Bir hata oluştu. Lütfen tekrar deneyin.</p>
+           <div className="flex flex-col items-center justify-center text-red-400 p-8 text-center max-w-md mx-auto">
+            <AlertCircle size={48} className="mb-4 text-red-300" />
+            <p className="font-bold text-lg mb-2 text-red-500">Hay aksi!</p>
+            <p className="text-stone-500">{state.error || "Bir hata oluştu. Lütfen tekrar deneyin."}</p>
           </div>
         )}
 
