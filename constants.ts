@@ -123,8 +123,11 @@ export const TURKISH_ALPHABET: AlphabetItem[] = [
   { 
     letter: 'İ', 
     examples: [
-      { word: 'İnci', englishTranslation: 'Pearl' },
-
+      { word: 'İnek', englishTranslation: 'Cow' },
+      { word: 'İncir', englishTranslation: 'Fig' },
+      { word: 'İğne', englishTranslation: 'Needle' },
+      { word: 'İplik', englishTranslation: 'Thread' },
+      { word: 'İnsan', englishTranslation: 'Human' }
     ]
   },
   { 
