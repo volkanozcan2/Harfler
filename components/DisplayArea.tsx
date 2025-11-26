@@ -40,7 +40,7 @@ export const DisplayArea: React.FC<DisplayAreaProps> = ({ selectedContext, state
       </div>
 
       {/* Image Area */}
-      <div className="flex-grow bg-stone-50 relative flex items-center justify-center">
+      <div className="flex-grow bg-stone-50 relative flex items-center justify-center overflow-hidden">
         {isLoading && (
           <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/80 z-20 backdrop-blur-sm">
             <Loader2 className="w-16 h-16 text-orange-400 animate-spin mb-4" />
@@ -60,7 +60,7 @@ export const DisplayArea: React.FC<DisplayAreaProps> = ({ selectedContext, state
           <img 
             src={state.imageUrl} 
             alt={`${selectedContext.letter} harfi ${selectedContext.word} şeklinde`}
-            className="w-full h-full object-contain p-8 animate-in fade-in zoom-in duration-500"
+            className="w-full h-full object-contain p-2 md:p-8 animate-in fade-in zoom-in duration-500 mix-blend-multiply"
           />
         )}
         
