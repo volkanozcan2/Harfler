@@ -1,14 +1,16 @@
 import React from 'react';
 import { SelectedContext, GenerationState } from '../types';
-import { Loader2, Image as ImageIcon, AlertCircle, RefreshCw } from 'lucide-react';
+import { Loader2, Image as ImageIcon, AlertCircle, RefreshCw, Palette, Clock } from 'lucide-react';
 
 interface DisplayAreaProps {
   selectedContext: SelectedContext | null;
   state: GenerationState;
   onRegenerate: () => void;
+  onOpenColoring: () => void;
+  cooldown: number;
 }
 
-export const DisplayArea: React.FC<DisplayAreaProps> = ({ selectedContext, state, onRegenerate }) => {
+export const DisplayArea: React.FC<DisplayAreaProps> = ({ selectedContext, state, onRegenerate, onOpenColoring, cooldown }) => {
   if (!selectedContext) {
     return (
       <div className="flex flex-col items-center justify-center h-full text-stone-400 p-8 text-center bg-white rounded-3xl shadow-sm border-2 border-stone-100">
@@ -20,6 +22,8 @@ export const DisplayArea: React.FC<DisplayAreaProps> = ({ selectedContext, state
   }
 
   const isLoading = state.status === 'loading';
+  const hasImage = state.status === 'success' && state.imageUrl;
+  const isCooldown = cooldown > 0;
 
   return (
     <div className="flex flex-col h-full bg-white rounded-3xl shadow-xl overflow-hidden border-4 border-orange-100 relative group">
@@ -52,7 +56,7 @@ export const DisplayArea: React.FC<DisplayAreaProps> = ({ selectedContext, state
           </div>
         )}
 
-        {state.status === 'success' && state.imageUrl && (
+        {hasImage && (
           <img 
             src={state.imageUrl} 
             alt={`${selectedContext.letter} harfi ${selectedContext.word} şeklinde`}
@@ -67,15 +71,28 @@ export const DisplayArea: React.FC<DisplayAreaProps> = ({ selectedContext, state
         )}
       </div>
 
-      {/* Regenerate Button */}
-      <div className="absolute bottom-6 right-6 z-20">
+      {/* Action Buttons */}
+      <div className="absolute bottom-6 right-6 z-20 flex flex-col sm:flex-row gap-3">
+         {/* Coloring Button */}
+         {hasImage && (
+           <button 
+             onClick={onOpenColoring}
+             disabled={isLoading || isCooldown}
+             className="bg-purple-500 hover:bg-purple-600 text-white font-bold py-3 px-6 rounded-full shadow-lg flex items-center gap-2 transition-all transform hover:scale-105 disabled:opacity-50 disabled:scale-100 disabled:cursor-not-allowed"
+           >
+             {isCooldown ? <Clock size={20} className="animate-pulse"/> : <Palette size={20} />}
+             <span>{isCooldown ? `Bekle (${cooldown})` : 'Boyama Yap'}</span>
+           </button>
+         )}
+
+         {/* Regenerate Button */}
          <button 
            onClick={onRegenerate}
-           disabled={isLoading}
-           className="bg-white hover:bg-orange-50 text-orange-500 border-2 border-orange-200 hover:border-orange-400 font-bold py-3 px-6 rounded-full shadow-lg flex items-center gap-2 transition-all transform hover:scale-105 disabled:opacity-50 disabled:scale-100"
+           disabled={isLoading || isCooldown}
+           className="bg-white hover:bg-orange-50 text-orange-500 border-2 border-orange-200 hover:border-orange-400 font-bold py-3 px-6 rounded-full shadow-lg flex items-center gap-2 transition-all transform hover:scale-105 disabled:opacity-50 disabled:scale-100 disabled:cursor-not-allowed"
          >
-           <RefreshCw size={20} className={`${isLoading ? 'animate-spin' : ''}`} />
-           <span>Farklı Bir Şey Çiz</span>
+           {isCooldown ? <Clock size={20} className="animate-pulse"/> : <RefreshCw size={20} className={`${isLoading ? 'animate-spin' : ''}`} />}
+           <span>{isCooldown ? `Bekle (${cooldown})` : 'Farklı Bir Şey Çiz'}</span>
          </button>
       </div>
     </div>

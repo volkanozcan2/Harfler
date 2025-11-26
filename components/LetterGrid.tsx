@@ -10,7 +10,7 @@ interface LetterGridProps {
 
 export const LetterGrid: React.FC<LetterGridProps> = ({ onSelect, selectedLetter, disabled }) => {
   return (
-    <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4 p-4 pb-24 md:pb-4 overflow-y-auto max-h-full no-scrollbar">
+    <div className={`grid grid-cols-4 sm:grid-cols-5 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4 p-4 pb-24 md:pb-4 overflow-y-auto max-h-full no-scrollbar transition-opacity duration-300 ${disabled ? 'opacity-50 pointer-events-none' : 'opacity-100'}`}>
       {TURKISH_ALPHABET.map((item) => {
         const isSelected = selectedLetter === item.letter;
         return (
@@ -24,7 +24,7 @@ export const LetterGrid: React.FC<LetterGridProps> = ({ onSelect, selectedLetter
                 ? 'bg-orange-500 text-white scale-105 ring-4 ring-orange-200 shadow-xl z-10' 
                 : 'bg-white text-stone-600 hover:bg-orange-50 hover:text-orange-500 hover:scale-105 active:scale-95'
               }
-              ${disabled ? 'opacity-50 cursor-not-allowed grayscale' : 'cursor-pointer'}
+              ${disabled ? 'cursor-not-allowed grayscale' : 'cursor-pointer'}
             `}
           >
             {item.letter}
