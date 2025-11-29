@@ -9,6 +9,13 @@ export default async function handler(req: any, res: any) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
+  // Object to store debug info to send back to browser
+  let redisDebug = {
+    status: 'disabled',
+    message: 'No REDIS_URL found',
+    usage: 'N/A'
+  };
+
   try {
     // --- Rate Limiting Logic (Node Redis) ---
     // Only run if REDIS_URL env var is present
@@ -18,7 +25,10 @@ export default async function handler(req: any, res: any) {
         url: process.env.REDIS_URL
       });
 
-      client.on('error', (err) => console.error('Redis Client Error', err));
+      client.on('error', (err) => {
+        console.error('Redis Client Error', err);
+        redisDebug = { status: 'error', message: err.message, usage: 'unknown' };
+      });
 
       try {
         await client.connect();
@@ -31,6 +41,12 @@ export default async function handler(req: any, res: any) {
         const currentUsage = await client.incr(key);
         console.log(`Current daily usage: ${currentUsage}/100`);
         
+        redisDebug = {
+          status: 'connected',
+          message: 'Redis working',
+          usage: `${currentUsage}/100 requests today`
+        };
+
         // If this is the first request of the day, set it to expire in 24 hours
         if (currentUsage === 1) {
           await client.expire(key, 86400); 
@@ -40,12 +56,14 @@ export default async function handler(req: any, res: any) {
         if (currentUsage > 100) {
           console.warn("Daily limit exceeded, blocking request.");
           await client.disconnect();
-          return res.status(429).json({ error: 'DAILY_LIMIT_EXCEEDED' });
+          return res.status(429).json({ error: 'DAILY_LIMIT_EXCEEDED', redisDebug });
         }
         
         await client.disconnect();
-      } catch (redisError) {
+      } catch (redisError: any) {
         console.error("Redis Error:", redisError);
+        redisDebug = { status: 'error', message: redisError.message, usage: 'unknown' };
+        
         // If redis fails, we don't want to crash the whole app, so we continue
         // But we ensure connection is closed if it was opened
         if (client.isOpen) {
@@ -104,15 +122,16 @@ export default async function handler(req: any, res: any) {
       throw new Error("No image generated");
     }
 
-    return res.status(200).json({ imageUrl });
+    // Return image AND redis debug info
+    return res.status(200).json({ imageUrl, redisDebug });
 
   } catch (error: any) {
     console.error("Server API Error:", error);
     
     if (error.message?.includes('429') || error.message?.includes('quota') || error.status === 429) {
-      return res.status(429).json({ error: 'QUOTA_EXCEEDED' });
+      return res.status(429).json({ error: 'QUOTA_EXCEEDED', redisDebug });
     }
 
-    return res.status(500).json({ error: error.message || 'Internal Server Error' });
+    return res.status(500).json({ error: error.message || 'Internal Server Error', redisDebug });
   }
 }

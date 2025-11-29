@@ -23,27 +23,39 @@ export const generateLetterImage = async (context: SelectedContext): Promise<str
 
     clearTimeout(timeoutId);
 
+    const data = await response.json();
+
+    // --- LOG REDIS INFO TO BROWSER CONSOLE ---
+    if (data.redisDebug) {
+      const style = data.redisDebug.status === 'connected' 
+        ? 'background: #d4edda; color: #155724; padding: 4px; border-radius: 4px; font-weight: bold;'
+        : 'background: #f8d7da; color: #721c24; padding: 4px; border-radius: 4px; font-weight: bold;';
+      
+      console.groupCollapsed(`%c ⚡ Server & Redis Status: ${data.redisDebug.status}`, style);
+      console.log("Usage:", data.redisDebug.usage);
+      console.log("Message:", data.redisDebug.message);
+      console.groupEnd();
+    }
+    // -----------------------------------------
+
     if (!response.ok) {
       if (response.status === 404) {
         throw new Error("API_NOT_FOUND");
       }
       
-      const errorData = await response.json().catch(() => ({}));
-      
-      if (errorData.error === 'DAILY_LIMIT_EXCEEDED') {
+      if (data.error === 'DAILY_LIMIT_EXCEEDED') {
         throw new Error("DAILY_LIMIT_EXCEEDED");
       }
 
-      if (response.status === 429 || errorData.error === 'QUOTA_EXCEEDED') {
+      if (response.status === 429 || data.error === 'QUOTA_EXCEEDED') {
         throw new Error("QUOTA_EXCEEDED");
       }
       if (response.status === 504) {
         throw new Error("TIMEOUT");
       }
-      throw new Error(errorData.error || 'Failed to generate image');
+      throw new Error(data.error || 'Failed to generate image');
     }
 
-    const data = await response.json();
     return data.imageUrl;
 
   } catch (error: any) {
@@ -77,24 +89,29 @@ export const generateColoringPage = async (context: SelectedContext): Promise<st
 
     clearTimeout(timeoutId);
 
+    const data = await response.json();
+
+    // --- LOG REDIS INFO TO BROWSER CONSOLE ---
+    if (data.redisDebug) {
+      console.log("%c ⚡ Redis (Coloring):", "color: blue", data.redisDebug);
+    }
+    // -----------------------------------------
+
     if (!response.ok) {
       if (response.status === 404) {
         throw new Error("API_NOT_FOUND");
       }
-
-      const errorData = await response.json().catch(() => ({}));
       
-      if (errorData.error === 'DAILY_LIMIT_EXCEEDED') {
+      if (data.error === 'DAILY_LIMIT_EXCEEDED') {
         throw new Error("DAILY_LIMIT_EXCEEDED");
       }
       
-      if (response.status === 429 || errorData.error === 'QUOTA_EXCEEDED') {
+      if (response.status === 429 || data.error === 'QUOTA_EXCEEDED') {
         throw new Error("QUOTA_EXCEEDED");
       }
-      throw new Error(errorData.error || 'Failed to generate coloring page');
+      throw new Error(data.error || 'Failed to generate coloring page');
     }
 
-    const data = await response.json();
     return data.imageUrl;
 
   } catch (error: any) {
