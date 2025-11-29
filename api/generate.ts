@@ -1,4 +1,5 @@
 import { GoogleGenAI } from "@google/genai";
+import { kv } from "@vercel/kv";
 
 // Initialize AI on the server side where process.env is secure
 const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
@@ -9,6 +10,27 @@ export default async function handler(req: any, res: any) {
   }
 
   try {
+    // --- Rate Limiting Logic ---
+    // Only run if Vercel KV is configured in the project settings
+    if (process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN) {
+      const date = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+      const key = `daily_limit_${date}`;
+      
+      // Increment the counter for today
+      const currentUsage = await kv.incr(key);
+      
+      // If this is the first request of the day, set it to expire in 24 hours
+      if (currentUsage === 1) {
+        await kv.expire(key, 86400); 
+      }
+
+      // Check against limit (100)
+      if (currentUsage > 100) {
+        return res.status(429).json({ error: 'DAILY_LIMIT_EXCEEDED' });
+      }
+    }
+    // ---------------------------
+
     const { letter, word, englishTranslation, type } = req.body;
 
     if (!letter || !word || !englishTranslation) {

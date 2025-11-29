@@ -29,6 +29,11 @@ export const generateLetterImage = async (context: SelectedContext): Promise<str
       }
       
       const errorData = await response.json().catch(() => ({}));
+      
+      if (errorData.error === 'DAILY_LIMIT_EXCEEDED') {
+        throw new Error("DAILY_LIMIT_EXCEEDED");
+      }
+
       if (response.status === 429 || errorData.error === 'QUOTA_EXCEEDED') {
         throw new Error("QUOTA_EXCEEDED");
       }
@@ -78,6 +83,11 @@ export const generateColoringPage = async (context: SelectedContext): Promise<st
       }
 
       const errorData = await response.json().catch(() => ({}));
+      
+      if (errorData.error === 'DAILY_LIMIT_EXCEEDED') {
+        throw new Error("DAILY_LIMIT_EXCEEDED");
+      }
+      
       if (response.status === 429 || errorData.error === 'QUOTA_EXCEEDED') {
         throw new Error("QUOTA_EXCEEDED");
       }

@@ -54,6 +54,8 @@ const App: React.FC = () => {
       let errorMessage = "Resim oluşturulamadı. Lütfen tekrar deneyin.";
       if (error.message === "QUOTA_EXCEEDED") {
           errorMessage = "Şu an çok yoğunuz! Lütfen 1 dakika bekleyip tekrar deneyin. (API Kotası Doldu)";
+      } else if (error.message === "DAILY_LIMIT_EXCEEDED") {
+          errorMessage = "Bugünlük resim hakkımız doldu! Yarın tekrar gelip yeni resimler çizebilirsin. (Günlük Limit: 100)";
       }
       setGenerationState({
         status: 'error',
@@ -118,8 +120,12 @@ const App: React.FC = () => {
       setIsColoringModalOpen(true);
       // Long cooldown after generating coloring page
       setCooldown(5);
-    } catch (error) {
-      alert("Boyama sayfası oluşturulamadı. Lütfen tekrar deneyin.");
+    } catch (error: any) {
+      let msg = "Boyama sayfası oluşturulamadı.";
+      if (error.message === "DAILY_LIMIT_EXCEEDED") {
+        msg = "Bugünlük limitimiz doldu. Yarın tekrar dene!";
+      }
+      alert(msg);
       setCooldown(3);
     } finally {
       setIsGeneratingColoring(false);
