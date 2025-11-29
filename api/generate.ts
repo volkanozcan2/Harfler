@@ -1,5 +1,5 @@
 import { GoogleGenAI } from "@google/genai";
-import { kv } from "@vercel/kv";
+import { createClient } from "redis";
 
 // Initialize AI on the server side where process.env is secure
 const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
@@ -10,24 +10,50 @@ export default async function handler(req: any, res: any) {
   }
 
   try {
-    // --- Rate Limiting Logic ---
-    // Only run if Vercel KV is configured in the project settings
-    if (process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN) {
-      const date = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
-      const key = `daily_limit_${date}`;
-      
-      // Increment the counter for today
-      const currentUsage = await kv.incr(key);
-      
-      // If this is the first request of the day, set it to expire in 24 hours
-      if (currentUsage === 1) {
-        await kv.expire(key, 86400); 
-      }
+    // --- Rate Limiting Logic (Node Redis) ---
+    // Only run if REDIS_URL env var is present
+    if (process.env.REDIS_URL) {
+      console.log("Found REDIS_URL, initializing client...");
+      const client = createClient({
+        url: process.env.REDIS_URL
+      });
 
-      // Check against limit (100)
-      if (currentUsage > 100) {
-        return res.status(429).json({ error: 'DAILY_LIMIT_EXCEEDED' });
+      client.on('error', (err) => console.error('Redis Client Error', err));
+
+      try {
+        await client.connect();
+        console.log("Redis connected successfully.");
+
+        const date = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+        const key = `daily_limit_${date}`;
+        
+        // Increment the counter for today
+        const currentUsage = await client.incr(key);
+        console.log(`Current daily usage: ${currentUsage}/100`);
+        
+        // If this is the first request of the day, set it to expire in 24 hours
+        if (currentUsage === 1) {
+          await client.expire(key, 86400); 
+        }
+
+        // Check against limit (100)
+        if (currentUsage > 100) {
+          console.warn("Daily limit exceeded, blocking request.");
+          await client.disconnect();
+          return res.status(429).json({ error: 'DAILY_LIMIT_EXCEEDED' });
+        }
+        
+        await client.disconnect();
+      } catch (redisError) {
+        console.error("Redis Error:", redisError);
+        // If redis fails, we don't want to crash the whole app, so we continue
+        // But we ensure connection is closed if it was opened
+        if (client.isOpen) {
+          await client.disconnect();
+        }
       }
+    } else {
+      console.log("No REDIS_URL found in environment variables. Rate limiting skipped.");
     }
     // ---------------------------
 
@@ -40,7 +66,6 @@ export default async function handler(req: any, res: any) {
     const isSoftG = letter === 'Ğ';
     let prompt = "";
     
-    // Logic moved from frontend to backend
     if (type === 'coloring') {
       if (isSoftG) {
         prompt = `A black and white coloring page outline for kids. A simple line-art illustration of a ${englishTranslation} (${word}) with the letter 'Ğ'. Thick clean lines, no shading, no gray, pure white background.`;
