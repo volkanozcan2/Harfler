@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { X, Eraser, Download, Trash2, Undo } from 'lucide-react';
+import { X, Eraser, Download, Trash2, PaintBucket } from 'lucide-react';
 
 interface DrawingModalProps {
   isOpen: boolean;
@@ -8,8 +8,22 @@ interface DrawingModalProps {
 }
 
 const COLORS = [
-  '#FF0000', '#FF7F00', '#FFD700', '#00FF00', '#0000FF', '#4B0082', '#9400D3', // Rainbow
-  '#000000', '#8B4513', '#FF69B4', '#00FFFF', '#808080' // Extras
+  '#FF0000', // Red
+  '#FF7F00', // Orange
+  '#FFD700', // Gold
+  '#FFFF00', // Yellow
+  '#00FF00', // Lime
+  '#008000', // Green
+  '#00FFFF', // Cyan
+  '#0000FF', // Blue
+  '#4B0082', // Indigo
+  '#800080', // Purple
+  '#FF69B4', // Hot Pink
+  '#FFC0CB', // Pink
+  '#8B4513', // Brown
+  '#A0522D', // Sienna
+  '#808080', // Gray
+  '#000000', // Black
 ];
 
 const BRUSH_SIZES = [5, 10, 20, 30];
@@ -20,7 +34,7 @@ export const DrawingModal: React.FC<DrawingModalProps> = ({ isOpen, onClose, bac
   const [isDrawing, setIsDrawing] = useState(false);
   const [color, setColor] = useState('#FF0000');
   const [brushSize, setBrushSize] = useState(10);
-  const [tool, setTool] = useState<'brush' | 'eraser'>('brush');
+  const [tool, setTool] = useState<'brush' | 'eraser' | 'fill'>('brush');
   
   // To handle resizing and redrawing background
   useEffect(() => {
@@ -51,21 +65,111 @@ export const DrawingModal: React.FC<DrawingModalProps> = ({ isOpen, onClose, bac
     }
   }, [isOpen, backgroundImageUrl]);
 
-  const startDrawing = (e: React.MouseEvent | React.TouchEvent) => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    
-    setIsDrawing(true);
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
+  const getCoordinates = (e: React.MouseEvent | React.TouchEvent, canvas: HTMLCanvasElement) => {
+    const rect = canvas.getBoundingClientRect();
+    let clientX, clientY;
 
-    const { x, y } = getCoordinates(e, canvas);
-    ctx.beginPath();
-    ctx.moveTo(x, y);
+    if ('touches' in e) {
+      clientX = e.touches[0].clientX;
+      clientY = e.touches[0].clientY;
+    } else {
+      clientX = (e as React.MouseEvent).clientX;
+      clientY = (e as React.MouseEvent).clientY;
+    }
+
+    return {
+      x: Math.floor(clientX - rect.left),
+      y: Math.floor(clientY - rect.top)
+    };
   };
 
-  const draw = (e: React.MouseEvent | React.TouchEvent) => {
-    if (!isDrawing) return;
+  const floodFill = (startX: number, startY: number, hexColor: string) => {
+    const canvas = canvasRef.current;
+    const ctx = canvas?.getContext('2d', { willReadFrequently: true });
+    if (!canvas || !ctx) return;
+
+    const width = canvas.width;
+    const height = canvas.height;
+    const imageData = ctx.getImageData(0, 0, width, height);
+    const data = imageData.data;
+
+    // Convert hex to RGBA
+    const r = parseInt(hexColor.slice(1, 3), 16);
+    const g = parseInt(hexColor.slice(3, 5), 16);
+    const b = parseInt(hexColor.slice(5, 7), 16);
+    const a = 255;
+
+    // Get color at start position
+    const startPos = (startY * width + startX) * 4;
+    const startR = data[startPos];
+    const startG = data[startPos + 1];
+    const startB = data[startPos + 2];
+    const startA = data[startPos + 3];
+
+    // Don't fill if colors are identical
+    if (r === startR && g === startG && b === startB && a === startA) return;
+
+    // Tolerance for color matching (to handle compression artifacts or anti-aliasing)
+    const tolerance = 50; 
+    const matchStartColor = (pos: number) => {
+      const dr = Math.abs(data[pos] - startR);
+      const dg = Math.abs(data[pos + 1] - startG);
+      const db = Math.abs(data[pos + 2] - startB);
+      // const da = Math.abs(data[pos + 3] - startA); // Ignore alpha difference for now
+      return dr < tolerance && dg < tolerance && db < tolerance;
+    };
+
+    const colorPixel = (pos: number) => {
+      data[pos] = r;
+      data[pos + 1] = g;
+      data[pos + 2] = b;
+      data[pos + 3] = a;
+    };
+
+    const queue = [[startX, startY]];
+    const visited = new Set(); 
+
+    while (queue.length > 0) {
+      const [x, y] = queue.pop()!;
+      const pos = (y * width + x) * 4;
+      const key = `${x},${y}`;
+
+      if (visited.has(key)) continue;
+      
+      if (matchStartColor(pos)) {
+        colorPixel(pos);
+        visited.add(key);
+
+        if (x > 0) queue.push([x - 1, y]);
+        if (x < width - 1) queue.push([x + 1, y]);
+        if (y > 0) queue.push([x, y - 1]);
+        if (y < height - 1) queue.push([x, y + 1]);
+      }
+    }
+
+    ctx.putImageData(imageData, 0, 0);
+  };
+
+  const handleMouseDown = (e: React.MouseEvent | React.TouchEvent) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    if (tool === 'fill') {
+      const { x, y } = getCoordinates(e, canvas);
+      floodFill(x, y, color);
+    } else {
+      setIsDrawing(true);
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+
+      const { x, y } = getCoordinates(e, canvas);
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+    }
+  };
+
+  const handleMouseMove = (e: React.MouseEvent | React.TouchEvent) => {
+    if (!isDrawing || tool === 'fill') return;
     const canvas = canvasRef.current;
     if (!canvas) return;
 
@@ -91,28 +195,8 @@ export const DrawingModal: React.FC<DrawingModalProps> = ({ isOpen, onClose, bac
     }
   };
 
-  const getCoordinates = (e: React.MouseEvent | React.TouchEvent, canvas: HTMLCanvasElement) => {
-    const rect = canvas.getBoundingClientRect();
-    let clientX, clientY;
-
-    if ('touches' in e) {
-      clientX = e.touches[0].clientX;
-      clientY = e.touches[0].clientY;
-    } else {
-      clientX = (e as React.MouseEvent).clientX;
-      clientY = (e as React.MouseEvent).clientY;
-    }
-
-    return {
-      x: clientX - rect.left,
-      y: clientY - rect.top
-    };
-  };
-
   const clearCanvas = () => {
     if (backgroundImageUrl && canvasRef.current) {
-        // Trigger re-run of the useEffect to reload image
-        // A simple way is to manually call the logic inside useEffect
         const canvas = canvasRef.current;
         const ctx = canvas.getContext('2d');
         if (!ctx) return;
@@ -152,7 +236,7 @@ export const DrawingModal: React.FC<DrawingModalProps> = ({ isOpen, onClose, bac
           <div className="flex md:flex-col gap-2">
              <button 
                 onClick={onClose}
-                className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full bg-red-100 text-red-500 hover:bg-red-200"
+                className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full bg-red-100 text-red-500 hover:bg-red-200 shrink-0"
                 title="Kapat"
              >
                 <X size={24} />
@@ -164,8 +248,8 @@ export const DrawingModal: React.FC<DrawingModalProps> = ({ isOpen, onClose, bac
              {COLORS.map(c => (
                <button
                  key={c}
-                 onClick={() => { setColor(c); setTool('brush'); }}
-                 className={`w-8 h-8 md:w-10 md:h-10 rounded-full border-2 transition-transform hover:scale-110 ${color === c && tool === 'brush' ? 'border-stone-800 scale-110 shadow-md' : 'border-transparent'}`}
+                 onClick={() => { setColor(c); if(tool === 'eraser') setTool('brush'); }}
+                 className={`w-8 h-8 md:w-10 md:h-10 rounded-full border-2 transition-transform hover:scale-110 shrink-0 ${color === c && tool !== 'eraser' ? 'border-stone-800 scale-110 shadow-md' : 'border-transparent'}`}
                  style={{ backgroundColor: c }}
                />
              ))}
@@ -173,27 +257,39 @@ export const DrawingModal: React.FC<DrawingModalProps> = ({ isOpen, onClose, bac
 
           <div className="w-px h-8 md:w-8 md:h-px bg-stone-300 mx-auto" />
 
-          <button 
-             onClick={() => setTool('eraser')}
-             className={`p-3 rounded-xl flex flex-col items-center gap-1 ${tool === 'eraser' ? 'bg-orange-200 text-orange-800' : 'bg-white text-stone-600'}`}
-          >
-             <Eraser size={20} />
-             <span className="text-[10px] font-bold">Silgi</span>
-          </button>
+           <div className="flex md:flex-col gap-2">
+            <button 
+               onClick={() => setTool('fill')}
+               className={`p-3 rounded-xl flex flex-col items-center gap-1 shrink-0 ${tool === 'fill' ? 'bg-blue-200 text-blue-800 ring-2 ring-blue-400' : 'bg-white text-stone-600'}`}
+               title="Kova"
+            >
+               <PaintBucket size={20} />
+               <span className="text-[10px] font-bold">Kova</span>
+            </button>
+
+            <button 
+               onClick={() => setTool('eraser')}
+               className={`p-3 rounded-xl flex flex-col items-center gap-1 shrink-0 ${tool === 'eraser' ? 'bg-orange-200 text-orange-800 ring-2 ring-orange-400' : 'bg-white text-stone-600'}`}
+               title="Silgi"
+            >
+               <Eraser size={20} />
+               <span className="text-[10px] font-bold">Silgi</span>
+            </button>
+          </div>
 
         </div>
 
         {/* Canvas Area */}
         <div className="flex-grow bg-stone-200 relative p-4" ref={containerRef}>
-           <div className="w-full h-full bg-white rounded-xl shadow-inner overflow-hidden relative cursor-crosshair">
+           <div className={`w-full h-full bg-white rounded-xl shadow-inner overflow-hidden relative ${tool === 'fill' ? 'cursor-cell' : 'cursor-crosshair'}`}>
               <canvas
                 ref={canvasRef}
-                onMouseDown={startDrawing}
-                onMouseMove={draw}
+                onMouseDown={handleMouseDown}
+                onMouseMove={handleMouseMove}
                 onMouseUp={stopDrawing}
                 onMouseLeave={stopDrawing}
-                onTouchStart={startDrawing}
-                onTouchMove={draw}
+                onTouchStart={handleMouseDown}
+                onTouchMove={handleMouseMove}
                 onTouchEnd={stopDrawing}
                 className="touch-none w-full h-full"
               />
@@ -210,7 +306,8 @@ export const DrawingModal: React.FC<DrawingModalProps> = ({ isOpen, onClose, bac
                    <button
                      key={size}
                      onClick={() => setBrushSize(size)}
-                     className={`rounded-full bg-stone-800 transition-all ${brushSize === size ? 'opacity-100 ring-2 ring-orange-400' : 'opacity-30 hover:opacity-50'}`}
+                     disabled={tool === 'fill'}
+                     className={`rounded-full bg-stone-800 transition-all ${brushSize === size ? 'opacity-100 ring-2 ring-orange-400' : 'opacity-30 hover:opacity-50'} ${tool === 'fill' ? 'opacity-10' : ''}`}
                      style={{ width: size, height: size, minWidth: size, minHeight: size }}
                    />
                  ))}
