@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { SelectedContext, GenerationState } from '../types';
-import { Loader2, Image as ImageIcon, AlertCircle, RefreshCw, Clock } from 'lucide-react';
+import { Loader2, Image as ImageIcon, AlertCircle, RefreshCw, Clock, Star } from 'lucide-react';
 
 interface DisplayAreaProps {
   selectedContext: SelectedContext | null;
@@ -10,6 +10,15 @@ interface DisplayAreaProps {
 }
 
 export const DisplayArea: React.FC<DisplayAreaProps> = ({ selectedContext, state, onRegenerate, cooldown }) => {
+  const [isImageLoading, setIsImageLoading] = useState(false);
+
+  // Reset loading state when imageUrl changes
+  useEffect(() => {
+    if (state.status === 'success' && state.imageUrl) {
+      setIsImageLoading(true);
+    }
+  }, [state.imageUrl, state.status]);
+
   if (!selectedContext) {
     return (
       <div className="flex flex-col items-center justify-center h-full text-stone-400 p-8 text-center bg-white rounded-3xl shadow-sm border-2 border-stone-100">
@@ -20,9 +29,12 @@ export const DisplayArea: React.FC<DisplayAreaProps> = ({ selectedContext, state
     );
   }
 
-  const isLoading = state.status === 'loading';
+  const isGenerating = state.status === 'loading';
   const hasImage = state.status === 'success' && state.imageUrl;
   const isCooldown = cooldown > 0;
+
+  // Show loading if we are generating OR if the image is still fetching
+  const showLoading = isGenerating || (hasImage && isImageLoading);
 
   return (
     <div className="flex flex-col h-full bg-white rounded-3xl shadow-xl overflow-hidden border-4 border-orange-100 relative group">
@@ -40,10 +52,15 @@ export const DisplayArea: React.FC<DisplayAreaProps> = ({ selectedContext, state
 
       {/* Image Area */}
       <div className="flex-grow bg-stone-50 relative flex items-center justify-center overflow-hidden">
-        {isLoading && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/80 z-20 backdrop-blur-sm">
-            <Loader2 className="w-16 h-16 text-orange-400 animate-spin mb-4" />
-            <p className="text-orange-400 font-bold text-xl animate-pulse">Resim Çiziliyor...</p>
+        {showLoading && (
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/90 z-20 backdrop-blur-sm">
+            <div className="relative">
+              <Star className="w-24 h-24 text-yellow-400 animate-spin-slow drop-shadow-lg" fill="currentColor" />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <span className="text-4xl">✨</span>
+              </div>
+            </div>
+            <p className="text-orange-500 font-bold text-xl mt-6 animate-bounce">Resim Geliyor...</p>
           </div>
         )}
 
@@ -59,7 +76,8 @@ export const DisplayArea: React.FC<DisplayAreaProps> = ({ selectedContext, state
           <img
             src={state.imageUrl}
             alt={`${selectedContext.letter} harfi ${selectedContext.word} şeklinde`}
-            className="w-full h-full object-contain p-2 md:p-8 animate-in fade-in zoom-in duration-500 mix-blend-multiply"
+            className={`w-full h-full object-contain p-2 md:p-8 transition-opacity duration-500 ${isImageLoading ? 'opacity-0' : 'opacity-100 animate-in fade-in zoom-in'}`}
+            onLoad={() => setIsImageLoading(false)}
           />
         )}
 
@@ -75,10 +93,10 @@ export const DisplayArea: React.FC<DisplayAreaProps> = ({ selectedContext, state
         {/* Regenerate Button */}
         <button
           onClick={onRegenerate}
-          disabled={isLoading || isCooldown}
+          disabled={showLoading || isCooldown}
           className="bg-white hover:bg-orange-50 text-orange-500 border-2 border-orange-200 hover:border-orange-400 font-bold py-3 px-6 rounded-full shadow-lg flex items-center gap-2 transition-all transform hover:scale-105 disabled:opacity-50 disabled:scale-100 disabled:cursor-not-allowed"
         >
-          {isCooldown ? <Clock size={20} className="animate-pulse" /> : <RefreshCw size={20} className={`${isLoading ? 'animate-spin' : ''}`} />}
+          {isCooldown ? <Clock size={20} className="animate-pulse" /> : <RefreshCw size={20} className={`${showLoading ? 'animate-spin' : ''}`} />}
           <span>{isCooldown ? `Bekle (${cooldown})` : 'Farklı Bir Şey Çiz'}</span>
         </button>
       </div>
