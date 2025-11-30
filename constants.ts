@@ -1,305 +1,254 @@
 import { AlphabetItem } from './types';
 
 export const TURKISH_ALPHABET: AlphabetItem[] = [
-  { 
-    letter: 'A', 
+  {
+    letter: 'A',
     examples: [
-      { word: 'Ahtapot', englishTranslation: 'Octopus' },
+      { word: 'Anahtar', englishTranslation: 'Key' },
       { word: 'Araba', englishTranslation: 'Car' },
-      { word: 'Arı', englishTranslation: 'Bee' },
-      { word: 'Aslan', englishTranslation: 'Lion' },
       { word: 'Armut', englishTranslation: 'Pear' },
-      { word: 'Ay', englishTranslation: 'Moon' },
-      { word: 'Ateş', englishTranslation: 'Fire' }
+      { word: 'Aslan', englishTranslation: 'Lion' },
+      { word: 'Ay', englishTranslation: 'Moon' }
     ]
   },
-  { 
-    letter: 'B', 
+  {
+    letter: 'B',
     examples: [
-      { word: 'Balık', englishTranslation: 'Fish' },
       { word: 'Balon', englishTranslation: 'Balloon' },
-      { word: 'Bebek', englishTranslation: 'Baby' },
-      { word: 'Balina', englishTranslation: 'Whale' },
-      { word: 'Baykuş', englishTranslation: 'Owl' },
-      { word: 'Bisiklet', englishTranslation: 'Bicycle' }
+      { word: 'Balık', englishTranslation: 'Fish' },
+      { word: 'Bardak', englishTranslation: 'Glass' },
+      { word: 'Bayrak', englishTranslation: 'Flag' },
+      { word: 'Bebek', englishTranslation: 'Baby' }
     ]
   },
-  { 
-    letter: 'C', 
+  {
+    letter: 'C',
     examples: [
-      { word: 'Civciv', englishTranslation: 'Chick' },
-      { word: 'Ceviz', englishTranslation: 'Walnut' },
+      { word: 'Cam', englishTranslation: 'Glass' },
       { word: 'Ceket', englishTranslation: 'Jacket' },
       { word: 'Cetvel', englishTranslation: 'Ruler' },
-      { word: 'Cüzdan', englishTranslation: 'Wallet' }
+      { word: 'Ceviz', englishTranslation: 'Walnut' },
+      { word: 'Civciv', englishTranslation: 'Chick' }
     ]
   },
-  { 
-    letter: 'Ç', 
+  {
+    letter: 'Ç',
     examples: [
-      { word: 'Çiçek', englishTranslation: 'Flower' },
-      { word: 'Çilek', englishTranslation: 'Strawberry' },
       { word: 'Çanta', englishTranslation: 'Bag' },
-      { word: 'Çekiç', englishTranslation: 'Hammer' },
-      { word: 'Çorap', englishTranslation: 'Sock' },
-      { word: 'Çay', englishTranslation: 'Tea' }
+      { word: 'Çay', englishTranslation: 'Tea' },
+      { word: 'Çilek', englishTranslation: 'Strawberry' },
+      { word: 'Çiçek', englishTranslation: 'Flower' },
+      { word: 'Çorap', englishTranslation: 'Sock' }
     ]
   },
-  { 
-    letter: 'D', 
+  {
+    letter: 'D',
     examples: [
-      { word: 'Dondurma', englishTranslation: 'Ice Cream' },
       { word: 'Davul', englishTranslation: 'Drum' },
       { word: 'Deniz', englishTranslation: 'Sea' },
+      { word: 'Diş', englishTranslation: 'Tooth' },
       { word: 'Domates', englishTranslation: 'Tomato' },
-      { word: 'Dede', englishTranslation: 'Grandpa' },
-      { word: 'Dinozor', englishTranslation: 'Dinosaur' }
+      { word: 'Dondurma', englishTranslation: 'Ice Cream' }
     ]
   },
-  { 
-    letter: 'E', 
+  {
+    letter: 'E',
     examples: [
-      { word: 'Elma', englishTranslation: 'Apple' },
-      { word: 'Eldiven', englishTranslation: 'Glove' },
-      { word: 'Eşek', englishTranslation: 'Donkey' },
-      { word: 'Ev', englishTranslation: 'House' },
       { word: 'Ekmek', englishTranslation: 'Bread' },
-      { word: 'Elbise', englishTranslation: 'Dress' }
+      { word: 'Eldiven', englishTranslation: 'Glove' },
+      { word: 'Elma', englishTranslation: 'Apple' },
+      { word: 'Etek', englishTranslation: 'Skirt' },
+      { word: 'Ev', englishTranslation: 'House' }
     ]
   },
-  { 
-    letter: 'F', 
+  {
+    letter: 'F',
     examples: [
-      { word: 'Fil', englishTranslation: 'Elephant' },
       { word: 'Fare', englishTranslation: 'Mouse' },
       { word: 'Fener', englishTranslation: 'Flashlight' },
-      { word: 'Fırça', englishTranslation: 'Brush' },
+      { word: 'Fil', englishTranslation: 'Elephant' },
       { word: 'Fındık', englishTranslation: 'Hazelnut' },
-      { word: 'Flamingo', englishTranslation: 'Flamingo' }
+      { word: 'Fırça', englishTranslation: 'Brush' }
     ]
   },
-  { 
-    letter: 'G', 
+  {
+    letter: 'G',
     examples: [
-      { word: 'Güneş', englishTranslation: 'Sun' },
       { word: 'Gemi', englishTranslation: 'Ship' },
+      { word: 'Gitar', englishTranslation: 'Guitar' },
       { word: 'Gözlük', englishTranslation: 'Glasses' },
       { word: 'Gül', englishTranslation: 'Rose' },
-      { word: 'Gitar', englishTranslation: 'Guitar' },
-      { word: 'Goril', englishTranslation: 'Gorilla' }
+      { word: 'Güneş', englishTranslation: 'Sun' }
     ]
   },
-  { 
-    letter: 'Ğ', 
+  {
+    letter: 'Ğ',
     examples: [
       { word: 'Ağaç', englishTranslation: 'Tree' },
+      { word: 'Boğa', englishTranslation: 'Bull' },
       { word: 'Dağ', englishTranslation: 'Mountain' },
-      { word: 'Yağmur', englishTranslation: 'Rain' },
-      { word: 'Kurbağa', englishTranslation: 'Frog' },
-      { word: 'Kaplumbağa', englishTranslation: 'Turtle' }
+      { word: 'Düğme', englishTranslation: 'Button' },
+      { word: 'Yağmur', englishTranslation: 'Rain' }
     ]
   },
-  { 
-    letter: 'H', 
+  {
+    letter: 'H',
     examples: [
-      { word: 'Havuç', englishTranslation: 'Carrot' },
-      { word: 'Horoz', englishTranslation: 'Rooster' },
-      { word: 'Helikopter', englishTranslation: 'Helicopter' },
-      { word: 'Hediye', englishTranslation: 'Gift' },
+      { word: 'Halı', englishTranslation: 'Carpet' },
       { word: 'Havlu', englishTranslation: 'Towel' },
-      { word: 'Hamur', englishTranslation: 'Dough' }
+      { word: 'Havuç', englishTranslation: 'Carrot' },
+      { word: 'Hediye', englishTranslation: 'Gift' },
+      { word: 'Horoz', englishTranslation: 'Rooster' }
     ]
   },
-  { 
-    letter: 'I', 
+  {
+    letter: 'I',
     examples: [
-      { word: 'Işık', englishTranslation: 'Light' },
-      { word: 'Ispanak', englishTranslation: 'Spinach' },
-      { word: 'Istakoz', englishTranslation: 'Lobster' },
       { word: 'Irmak', englishTranslation: 'River' },
-      { word: 'Izgara', englishTranslation: 'Grill' }
+      { word: 'Islık', englishTranslation: 'Whistle' },
+      { word: 'Ispanak', englishTranslation: 'Spinach' },
+      { word: 'Izgara', englishTranslation: 'Grill' },
+      { word: 'Işık', englishTranslation: 'Light' }
     ]
   },
-  { 
-    letter: 'İ', 
+  {
+    letter: 'İ',
     examples: [
-      { word: 'İnci', englishTranslation: 'Pearl' },
-      { word: 'İnek', englishTranslation: 'Cow' },
       { word: 'İncir', englishTranslation: 'Fig' },
-      { word: 'İğne', englishTranslation: 'Needle' },
-      { word: 'İplik', englishTranslation: 'Thread' },
-      { word: 'İnsan', englishTranslation: 'Human' }
+      { word: 'İnek', englishTranslation: 'Cow' },
+      { word: 'İp', englishTranslation: 'Rope' },
+      { word: 'İskelet', englishTranslation: 'Skeleton' },
+      { word: 'İğne', englishTranslation: 'Needle' }
     ]
   },
-  { 
-    letter: 'J', 
+  {
+    letter: 'J',
     examples: [
-      { word: 'Jelibon', englishTranslation: 'Jelly bean' },
-      { word: 'Jilet', englishTranslation: 'Razor' },
+      { word: 'Jaguar', englishTranslation: 'Jaguar' },
+      { word: 'Jandarma', englishTranslation: 'Gendarme' },
+      { word: 'Jelibon', englishTranslation: 'Jelly Bean' },
       { word: 'Jeton', englishTranslation: 'Token' },
-      { word: 'Judo', englishTranslation: 'Judo' },
-      { word: 'Jip', englishTranslation: 'Jeep' }
+      { word: 'Jilet', englishTranslation: 'Razor' }
     ]
   },
-  { 
-    letter: 'K', 
+  {
+    letter: 'K',
     examples: [
-      { word: 'Kedi', englishTranslation: 'Cat' },
-      { word: 'Köpek', englishTranslation: 'Dog' },
       { word: 'Kalem', englishTranslation: 'Pencil' },
+      { word: 'Kapı', englishTranslation: 'Door' },
+      { word: 'Kedi', englishTranslation: 'Cat' },
       { word: 'Kitap', englishTranslation: 'Book' },
-      { word: 'Kuş', englishTranslation: 'Bird' },
-      { word: 'Kelebek', englishTranslation: 'Butterfly' }
+      { word: 'Köpek', englishTranslation: 'Dog' }
     ]
   },
-  { 
-    letter: 'L', 
+  {
+    letter: 'L',
     examples: [
-      { word: 'Limon', englishTranslation: 'Lemon' },
+      { word: 'Lahana', englishTranslation: 'Cabbage' },
       { word: 'Lale', englishTranslation: 'Tulip' },
-      { word: 'Leylek', englishTranslation: 'Stork' },
       { word: 'Lamba', englishTranslation: 'Lamp' },
-      { word: 'Lastik', englishTranslation: 'Tire' }
+      { word: 'Leylek', englishTranslation: 'Stork' },
+      { word: 'Limon', englishTranslation: 'Lemon' }
     ]
   },
-  { 
-    letter: 'M', 
+  {
+    letter: 'M',
     examples: [
-      { word: 'Maymun', englishTranslation: 'Monkey' },
-      { word: 'Masa', englishTranslation: 'Table' },
-      { word: 'Muz', englishTranslation: 'Banana' },
       { word: 'Makas', englishTranslation: 'Scissors' },
-      { word: 'Mantar', englishTranslation: 'Mushroom' },
-      { word: 'Mısır', englishTranslation: 'Corn' }
+      { word: 'Masa', englishTranslation: 'Table' },
+      { word: 'Maymun', englishTranslation: 'Monkey' },
+      { word: 'Merdiven', englishTranslation: 'Ladder' },
+      { word: 'Muz', englishTranslation: 'Banana' }
     ]
   },
-  { 
-    letter: 'N', 
+  {
+    letter: 'N',
     examples: [
-      { word: 'Nar', englishTranslation: 'Pomegranate' },
-      { word: 'Nane', englishTranslation: 'Mint' },
       { word: 'Nal', englishTranslation: 'Horseshoe' },
-      { word: 'Nohut', englishTranslation: 'Chickpea' }
+      { word: 'Nane', englishTranslation: 'Mint' },
+      { word: 'Nar', englishTranslation: 'Pomegranate' },
+      { word: 'Nehir', englishTranslation: 'River' },
+      { word: 'Nota', englishTranslation: 'Note' }
     ]
   },
-  { 
-    letter: 'O', 
+  {
+    letter: 'O',
     examples: [
-      { word: 'Otobüs', englishTranslation: 'Bus' },
-      { word: 'Orman', englishTranslation: 'Forest' },
+      { word: 'Ocak', englishTranslation: 'Stove' },
+      { word: 'Odun', englishTranslation: 'Wood' },
       { word: 'Okul', englishTranslation: 'School' },
-      { word: 'Oyuncak', englishTranslation: 'Toy' },
-      { word: 'Odun', englishTranslation: 'Wood' }
+      { word: 'Olta', englishTranslation: 'Fishing Rod' },
+      { word: 'Otobüs', englishTranslation: 'Bus' }
     ]
   },
-  { 
-    letter: 'Ö', 
+  {
+    letter: 'Ö',
     examples: [
+      { word: 'Öküz', englishTranslation: 'Ox' },
+      { word: 'Önlük', englishTranslation: 'Apron' },
       { word: 'Ördek', englishTranslation: 'Duck' },
       { word: 'Örümcek', englishTranslation: 'Spider' },
-      { word: 'Önlük', englishTranslation: 'Apron' },
-      { word: 'Öğretmen', englishTranslation: 'Teacher' }
+      { word: 'Öğrenci', englishTranslation: 'Student' }
     ]
   },
-  { 
-    letter: 'P', 
+  {
+    letter: 'P',
     examples: [
-      { word: 'Panda', englishTranslation: 'Panda' },
-      { word: 'Portakal', englishTranslation: 'Orange' },
-      { word: 'Patates', englishTranslation: 'Potato' },
-      { word: 'Peynir', englishTranslation: 'Cheese' },
-      { word: 'Penguen', englishTranslation: 'Penguin' },
-      { word: 'Para', englishTranslation: 'Money' }
+      { word: 'Penguen', englishTranslation: 'Penguin' }
     ]
   },
-  { 
-    letter: 'R', 
+  {
+    letter: 'R',
     examples: [
-      { word: 'Robot', englishTranslation: 'Robot' },
-      { word: 'Roket', englishTranslation: 'Rocket' },
-      { word: 'Radyo', englishTranslation: 'Radio' },
-      { word: 'Resim', englishTranslation: 'Picture' },
-      { word: 'Reçel', englishTranslation: 'Jam' }
+      { word: 'Robot', englishTranslation: 'Robot' }
     ]
   },
-  { 
-    letter: 'S', 
+  {
+    letter: 'S',
     examples: [
-      { word: 'Salyangoz', englishTranslation: 'Snail' },
-      { word: 'Saat', englishTranslation: 'Clock' },
-      { word: 'Su', englishTranslation: 'Water' },
-      { word: 'Süt', englishTranslation: 'Milk' },
-      { word: 'Sandalye', englishTranslation: 'Chair' },
-      { word: 'Sincap', englishTranslation: 'Squirrel' }
+      { word: 'Saat', englishTranslation: 'Clock' }
     ]
   },
-  { 
-    letter: 'Ş', 
+  {
+    letter: 'Ş',
     examples: [
-      { word: 'Şemsiye', englishTranslation: 'Umbrella' },
-      { word: 'Şapka', englishTranslation: 'Hat' },
-      { word: 'Şeker', englishTranslation: 'Candy' },
-      { word: 'Şişe', englishTranslation: 'Bottle' },
-      { word: 'Şimşek', englishTranslation: 'Lightning' }
+      { word: 'Şemsiye', englishTranslation: 'Umbrella' }
     ]
   },
-  { 
-    letter: 'T', 
+  {
+    letter: 'T',
     examples: [
-      { word: 'Tavşan', englishTranslation: 'Rabbit' },
-      { word: 'Top', englishTranslation: 'Ball' },
-      { word: 'Tren', englishTranslation: 'Train' },
-      { word: 'Telefon', englishTranslation: 'Phone' },
-      { word: 'Tarak', englishTranslation: 'Comb' },
-      { word: 'Timsah', englishTranslation: 'Crocodile' }
+      { word: 'Top', englishTranslation: 'Ball' }
     ]
   },
-  { 
-    letter: 'U', 
+  {
+    letter: 'U',
     examples: [
-      { word: 'Uçurtma', englishTranslation: 'Kite' },
-      { word: 'Uçak', englishTranslation: 'Airplane' },
-      { word: 'Uyku', englishTranslation: 'Sleep' },
-      { word: 'Un', englishTranslation: 'Flour' }
+      { word: 'Uçurtma', englishTranslation: 'Kite' }
     ]
   },
-  { 
-    letter: 'Ü', 
+  {
+    letter: 'Ü',
     examples: [
-      { word: 'Üzüm', englishTranslation: 'Grapes' },
-      { word: 'Ütü', englishTranslation: 'Iron' },
-      { word: 'Üçgen', englishTranslation: 'Triangle' },
-      { word: 'Ülke', englishTranslation: 'Country' }
+      { word: 'Üzüm', englishTranslation: 'Grapes' }
     ]
   },
-  { 
-    letter: 'V', 
+  {
+    letter: 'V',
     examples: [
-      { word: 'Vazo', englishTranslation: 'Vase' },
-      { word: 'Valiz', englishTranslation: 'Suitcase' },
-      { word: 'Vişne', englishTranslation: 'Sour Cherry' },
-      { word: 'Vapur', englishTranslation: 'Ferry' }
+      { word: 'Vazo', englishTranslation: 'Vase' }
     ]
   },
-  { 
-    letter: 'Y', 
+  {
+    letter: 'Y',
     examples: [
-      { word: 'Yıldız', englishTranslation: 'Star' },
-      { word: 'Yumurta', englishTranslation: 'Egg' },
-      { word: 'Yatak', englishTranslation: 'Bed' },
-      { word: 'Yılan', englishTranslation: 'Snake' },
-      { word: 'Yaprak', englishTranslation: 'Leaf' },
-      { word: 'Yunus', englishTranslation: 'Dolphin' }
+      { word: 'Yıldız', englishTranslation: 'Star' }
     ]
   },
-  { 
-    letter: 'Z', 
+  {
+    letter: 'Z',
     examples: [
-      { word: 'Zürafa', englishTranslation: 'Giraffe' },
-      { word: 'Zebra', englishTranslation: 'Zebra' },
-      { word: 'Zil', englishTranslation: 'Bell' },
-      { word: 'Zeytin', englishTranslation: 'Olive' },
-      { word: 'Zarf', englishTranslation: 'Envelope' }
+      { word: 'Zebra', englishTranslation: 'Zebra' }
     ]
-  },
+  }
 ];
